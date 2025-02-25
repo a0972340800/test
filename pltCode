@@ -1,1 +1,7 @@
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+from matplotlib.font_manager import fontManager 
+
+fontManager.addfont("ChineseFont.ttf") # 在fontManager中增加字體「ChineseFont.ttf」
+mpl.rc('font' ,family = "ChineseFont") # 在mpl中，將字體設定為「ChineseFont」
 
