@@ -11,3 +11,18 @@ fontManager.addfont("ChineseFont.ttf") # 在fontManager中增加字體「Chinese
 mpl.rc('font' ,family = "ChineseFont") # 在mpl中，將字體設定為「ChineseFont」
 
 
+def PlotMaker(y_1, y_2, name, Time, Zero = [0, 0, 0, 0, 0, 0]):
+    plt.figure(figsize=(10, 5)) # 設定圖表寬度與長度
+    plt.xticks(np.arange(0, 6, 0.5)) #設定x軸刻度起始、整數數量、刻度間距
+    
+    plt.plot(Time ,y_1 ,marker = "+", color = "r", label = f"{name}X軸") # plot折現圖
+    plt.plot(Time ,y_2 ,marker = "+", color = "g", label = f"{name}Y軸")
+    plt.plot(Time ,Zero ,marker = "+", color = "b", label = f"{name}Z軸") # 預設最後一個是Zero，有數據的話再另外填入
+
+    
+    plt.title(f"{name}電壓-時間") # 圖表名稱
+    plt.xlabel("時間(min)") # 橫軸名稱
+    plt.ylabel("電壓(V)") # 縱軸名稱
+    plt.legend() # 顯示圖例
+    
+    plt.show() # 繪圖
