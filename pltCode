@@ -11,7 +11,7 @@ fontManager.addfont("ChineseFont.ttf") # 在fontManager中增加字體「Chinese
 mpl.rc('font' ,family = "ChineseFont") # 在mpl中，將字體設定為「ChineseFont」
 
 
-def PlotMaker(y_1, y_2, name, Time, Zero = [0, 0, 0, 0, 0, 0]):
+def PlotMaker(y_1, y_2, name, Time, Zero = [0, 0, 0, 0, 0, 0]): # 簡易折線圖
     plt.figure(figsize=(10, 5)) # 設定圖表寬度與長度
     plt.xticks(np.arange(0, 6, 0.5)) #設定x軸刻度起始、整數數量、刻度間距
     
@@ -26,3 +26,46 @@ def PlotMaker(y_1, y_2, name, Time, Zero = [0, 0, 0, 0, 0, 0]):
     plt.legend() # 顯示圖例
     
     plt.show() # 繪圖
+
+
+def MakePlot(t, y_1, y_2, y_3, y_max, name): # 散佈圖含趨勢線
+    x = t
+    X_axis = y_1  # 模擬接近線性的數據
+    Y_axis = y_2
+    Z_axis = y_3
+
+    # 使用 NumPy polyfit() 擬合一次多項式 (線性回歸)
+    m_1, b_1 = np.polyfit(x, X_axis, 1)  # 1 表示一次多項式 (y = mx + b)
+    m_2, b_2 = np.polyfit(x, Y_axis, 1)
+    m_3, b_3 = np.polyfit(x, Z_axis, 1)
+
+    # 產生趨勢線
+    x_fit = np.linspace(min(x), max(x), 100)  # 產生平滑的 x 值
+    X_axis_fit = m_1 * x_fit + b_1  # 計算對應的 y 值
+    Y_axis_fit = m_2 * x_fit + b_2
+    Z_axis_fit = m_3 * x_fit + b_3
+
+    # 計算 MSE
+    X_axis_pred = m_1 * x + b_1  # 計算訓練數據的預測值
+    mse = np.mean((X_axis - X_axis_pred) ** 2)  # 計算 MSE
+    Y_axis_pred = m_2 * x + b_2 
+    mse = np.mean((Y_axis - Y_axis_pred) ** 2)
+    Z_axis_pred = m_3 * x + b_3 
+    mse = np.mean((Z_axis - Z_axis_pred) ** 2)
+
+    # 繪圖
+    plt.figure(figsize=(10, 5))
+    plt.xticks(np.arange(0, 6, 0.5))
+    plt.scatter(x, X_axis, marker = "+", color = 'r')  # 散點圖
+    plt.plot(x_fit, X_axis_fit, color = 'r', label = f"{name}X軸趨勢 : y = {m_1:.2f}x + {b_1:.2f}")  # 趨勢線
+    plt.scatter(x, Y_axis, marker = "+", color = 'g')
+    plt.plot(x_fit, Y_axis_fit, color = 'g', label = f"{name}Y軸趨勢 : y = {m_2:.2f}x + {b_2:.2f}")
+    plt.scatter(x, Z_axis, marker = "+", color = 'b')
+    plt.plot(x_fit, Z_axis_fit, color = 'b', label = f"{name}Z軸趨勢 : y = {m_3:.2f}x + {b_3:.2f}")
+    plt.xlabel("時間(min)") # X軸標題
+    plt.ylabel("電壓(V)") # Y軸標題
+    plt.title(f"{name}電壓-時間") # 圖表標題
+    plt.legend() # 圖示
+    plt.xlim([-0.2, 5.2]) # 固定x軸上下限
+    plt.ylim([0.3, y_max]) # 固定y軸上下限
+    plt.show()
